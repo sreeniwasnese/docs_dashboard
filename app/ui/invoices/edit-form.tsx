@@ -10,6 +10,9 @@ import {
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 
+import { updateInvoice } from '@/app/lib/action';
+
+
 export default function EditInvoiceForm({
   invoice,
   customers,
@@ -17,14 +20,18 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
+
+  // ensure values passed to server actions are encoded
+  const updateInvoiceWithID = updateInvoice.bind(null, invoice.id)
+  // <input type="hidden" name="id" value={invoice.id} />  alternatively we can use this but not ideal
+
   return (
-    <form>
+    <form action={updateInvoiceWithID}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
-          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
-          </label>
+          <label htmlFor="customer" className="mb-2 block text-sm font-medium"> Choose customer </label>
+
           <div className="relative">
             <select
               id="customer"
@@ -109,6 +116,7 @@ export default function EditInvoiceForm({
           </div>
         </fieldset>
       </div>
+      
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/invoices"
